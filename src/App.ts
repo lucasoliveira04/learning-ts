@@ -1,25 +1,24 @@
-import readline from "readline";
 import { CreatedUser } from "./services/CreateUser";
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-});
+const createdUser = async () => {
+  try {
+    const userService: CreatedUser = new CreatedUser();
+    const user: any = userService.addUser("Lucas", "lucas@gmail.com", "123456");
 
-const question = (str: string): Promise<string> => {
-  return new Promise((resolve) => rl.question(str, resolve));
+    return user;
+  } catch (error) {
+    console.error("Error creating user:", error);
+  }
 };
 
-async function main() {
-  const name = await question("Enter your name: ");
-  const email = await question("Enter your email: ");
-  const password = await question("Enter your password: ");
 
-  const userServices = new CreatedUser();
-  userServices.addUser(name, email, password);
+createdUser()
+  .then((data: any) => {
+    return data;
+  })
+  .catch((error: any) => {
+    return error;
+  });
 
-  console.log("Usuários cadastrados: ", await userServices.getAllUsers());
-  rl.close();
-}
 
-main();
+
