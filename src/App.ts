@@ -1,8 +1,6 @@
 import { CreatedUser } from "./services/CreateUser";
 
 const userServices = new CreatedUser();
+const getAllUsers = userServices.getAllUsers();
 
-userServices.addUser();
 
-console.log("usuario adicionado: ", userServices);
-console.log(userServices.getAllUsers());
