@@ -3,22 +3,21 @@ import { CreatedUser } from "./services/CreateUser";
 const createdUser = async () => {
   try {
     const userService: CreatedUser = new CreatedUser();
-    const user: any = userService.addUser("Lucas", "lucas@gmail.com", "123456");
-
+    const user = await userService.addUser(
+      "Lucas",
+      "lucas@gmail.com",
+      "admin123dde"
+    );
     return user;
-  } catch (error) {
-    console.error("Error creating user:", error);
+  } catch (error: any) {
+    throw error;
   }
 };
 
-
 createdUser()
   .then((data: any) => {
-    return data;
+    console.log("User created successfully:", data);
   })
   .catch((error: any) => {
-    return error;
+    console.error("Error creating user:", error.message);
   });
-
-
-
