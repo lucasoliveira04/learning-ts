@@ -4,8 +4,8 @@ import { UserRepository } from "../repository/UserRepository";
 export class CreatedUser {
   public userRepository: UserRepository = new UserRepository();
 
-  public addUser(): any {
-    const user = new User("Lucas", "lucas@example.com", "password123");
+  public addUser(name: string, email: string, password: string): any {
+    const user = new User(name, email, password);
     return this.userRepository.save(user);
   }
 
