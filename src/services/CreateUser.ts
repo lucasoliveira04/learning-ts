@@ -1,16 +1,15 @@
 import User from "../model/User";
+import { UserRepository } from "../repository/UserRepository";
 
 export class CreatedUser {
-  public database: any[] = [];
+  public userRepository: UserRepository = new UserRepository();
 
   public addUser(): any {
-    const newUser = new User("Lucas", "lucas@example.com", "password123");
-
-    this.database.push(newUser);
-    return newUser;
+    const user = new User("Lucas", "lucas@example.com", "password123");
+    return this.userRepository.save(user);
   }
 
   public getAllUsers(): any[] {
-    return this.database;
+    return this.userRepository.findAll();
   }
 }
