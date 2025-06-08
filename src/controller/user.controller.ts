@@ -2,6 +2,8 @@ import { Router, Request, Response } from "express";
 import UserResponse from "../types/user.response";
 import { UserServices } from "../services/user.services";
 import UserValidation from "../utils/validation/user.validation";
+import { UserRequest } from "../types/user.request";
+import { User } from "../model/user.modal";
 
 export class UserController {
   public router: Router;
@@ -15,10 +17,18 @@ export class UserController {
   }
 
   private routes() {
-    this.router.get("/users", this.getUsers as any | Response<UserResponse>);
+    this.router.get(
+      `/api/users`,
+      this.getUsers as any | Response<UserResponse>
+    );
+
+    this.router.post(
+      "/api/users/add",
+      this.addUser as any | Response<UserResponse>
+    );
   }
 
-  private getUsers = (req: Request, res: Response): Response<UserResponse> => {
+  private addUser = (req: Request, res: Response): Response<UserRequest> => {
     try {
       const { name, email, age, cpf } = req.body;
 
@@ -36,5 +46,16 @@ export class UserController {
         method: req.method,
       });
     }
+  };
+
+  private getUsers = async (
+    req: Request,
+    res: Response
+  ): Promise<Response<User[]>> => {
+    return res.status(200).json({
+      message: "Users fetched successfully",
+      data: await this.userServices.getUsers(),
+      timestamp: new Date(),
+    });
   };
 }
