@@ -1,12 +1,29 @@
-export class User {
-  private name: string;
-  private email: string;
-  private age: number;
-  private cpf: string;
-  private createdAt: Date;
-  private updatedAt: Date;
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-  constructor(name: string, email: string, age: number, cpf: string) {
+@Entity("userEntity")
+export class User {
+  @PrimaryGeneratedColumn()
+  id!: number;
+
+  @Column()
+  name: string;
+
+  @Column()
+  email: string;
+
+  @Column()
+  age: number;
+
+  @Column({ unique: true, nullable: true })
+  cpf?: string;
+
+  @Column()
+  createdAt: Date;
+
+  @Column()
+  updatedAt: Date;
+
+  constructor(name: string, email: string, age: number, cpf?: string) {
     this.name = name;
     this.email = email;
     this.age = age;
