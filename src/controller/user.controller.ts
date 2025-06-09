@@ -1,9 +1,8 @@
 import { Router, Request, Response } from "express";
-import UserResponse from "../types/user.response";
-import { UserServices } from "../services/user.services";
-import UserValidation from "../utils/validation/user.validation";
-import { UserRequest } from "../types/user.request";
+import UserResponse from "../types/user-response";
+import { UserRequest } from "../types/user-request";
 import { User } from "../model/user.modal";
+import { UserServices } from "../services/user/user.service";
 
 export class UserController {
   public router: Router;
@@ -13,7 +12,7 @@ export class UserController {
     this.router = Router();
     this.routes();
 
-    this.userServices = new UserServices(UserValidation);
+    this.userServices = new UserServices();
   }
 
   private routes() {
@@ -28,11 +27,16 @@ export class UserController {
     );
   }
 
-  private addUser = (req: Request, res: Response): Response<UserRequest> => {
+  private addUser = async (
+    req: Request,
+    res: Response
+  ): Promise<Response<UserRequest>> => {
     try {
       const { name, email, age, cpf } = req.body;
 
-      const userRequest = this.userServices.addUser({ ...req.body });
+      const userRequest: UserRequest = await this.userServices.addUser({
+        ...req.body,
+      });
 
       return res.status(201).json({
         message: "User created successfully",
@@ -54,7 +58,7 @@ export class UserController {
   ): Promise<Response<User[]>> => {
     return res.status(200).json({
       message: "Users fetched successfully",
-      data: await this.userServices.getUsers(),
+      data: await this.userServices.getAllUsers(),
       timestamp: new Date(),
     });
   };
