@@ -25,6 +25,11 @@ export class UserController {
       "/api/users/add",
       this.addUser as any | Response<UserResponse>
     );
+
+    this.router.delete(
+      "/api/users/delete/:id",
+      this.deleteUser as any | Response<void>
+    );
   }
 
   private addUser = async (
@@ -61,5 +66,23 @@ export class UserController {
       data: await this.userServices.getAllUsers(),
       timestamp: new Date(),
     });
+  };
+
+  private deleteUser = async (
+    req: Request,
+    res: Response
+  ): Promise<Response<void>> => {
+    try {
+      const { id } = req.params;
+      await this.userServices.deleteUser(Number(id));
+      return res.status(200).send();
+    } catch (error: any) {
+      return res.status(500).json({
+        message: error.message || "Unspecified error",
+        data: new Date(),
+        path: req.path,
+        method: req.method,
+      });
+    }
   };
 }
