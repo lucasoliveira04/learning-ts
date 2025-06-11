@@ -3,16 +3,19 @@ import UserResponse from "../types/user-response";
 import { UserRequest } from "../types/user-request";
 import { User } from "../model/user.modal";
 import { UserServices } from "../services/user/user.service";
+import { RabbitMQService } from "../services/rabbitmq/rabbitmq.service";
 
 export class UserController {
   public router: Router;
   private userServices: UserServices;
+  private rabbitMQService: RabbitMQService;
 
   constructor() {
     this.router = Router();
     this.routes();
 
     this.userServices = new UserServices();
+    this.rabbitMQService = new RabbitMQService();
   }
 
   private routes() {
@@ -42,6 +45,8 @@ export class UserController {
       const userRequest: UserRequest = await this.userServices.addUser({
         ...req.body,
       });
+
+      await this.rabbitMQService.sendMessage("Hello, RabbitMQ!");
 
       return res.status(201).json({
         message: "User created successfully",
